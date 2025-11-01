@@ -1,0 +1,68 @@
+# ---------------------------
+# Python
+# ---------------------------
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+*$py.class
+
+# ---------------------------
+# Virtual Environment
+# ---------------------------
+venv/
+env/
+ENV/
+.venv/
+.idea/
+.vscode/
+
+# ---------------------------
+# Pytest & Coverage
+# ---------------------------
+.pytest_cache/
+*.log
+*.tmp
+.coverage
+htmlcov/
+.cache/
+
+# ---------------------------
+# Jupyter Notebooks
+# ---------------------------
+.ipynb_checkpoints/
+
+# ---------------------------
+# OS-specific
+# ---------------------------
+.DS_Store
+Thumbs.db
+
+# ---------------------------
+# Selenium / WebDriver
+# ---------------------------
+chromedriver.log
+
+# ---------------------------
+# Build / Distribution
+# ---------------------------
+build/
+dist/
+*.egg-info/
+*.egg
+
+# ---------------------------
+# Reports
+# ---------------------------
+*.xml
+*.json
+*.csv
+
+# ---------------------------
+# Temporary files
+# ---------------------------
+*.bak
+*.swp
+*.swo
+*.orig
