@@ -1,51 +1,39 @@
 pipeline {
     agent any
 
-    environment {
-        VENV = 'venv'
-    }
-
     stages {
-        stage('Checkout') {
+        stage('Checkout Code') {
             steps {
-                git 'https://github.com/Extraordinarytechy/flask-ci-testing.git'
+                git branch: 'main', url: 'https://github.com/Extraordinarytechy/flask-ci-testing.git'
             }
         }
 
         stage('Setup Python Env') {
             steps {
-                sh '''
-                python3 -m venv ${VENV}
-                . ${VENV}/bin/activate
-                pip install --upgrade pip
-                pip install -r requirements.txt
-                '''
+                sh 'python3 -m venv venv'
+                sh '. venv/bin/activate && pip install --upgrade pip && pip install -r requirements.txt'
             }
         }
 
         stage('Run Unit Tests') {
             steps {
-                sh '''
-                . ${VENV}/bin/activate
-                pytest test_unit.py -v
-                '''
+                sh '. venv/bin/activate && pytest test_unit.py -v --junitxml=results_unit.xml'
             }
         }
 
         stage('Run Integration Tests') {
             steps {
-                sh '''
-                . ${VENV}/bin/activate
-                pytest test_integration.py -v
-                '''
+                sh '. venv/bin/activate && pytest test_integration.py -v --junitxml=results_integration.xml'
             }
         }
 
         stage('Run E2E Tests (Headless)') {
             steps {
                 sh '''
-                . ${VENV}/bin/activate
-                pytest test_e2e.py -v
+                . venv/bin/activate
+                nohup python app.py &
+                sleep 5
+                pytest test_e2e.py -v --junitxml=results_e2e.xml
                 '''
             }
         }
@@ -53,8 +41,10 @@ pipeline {
 
     post {
         always {
-            junit '**/pytest.xml'
-            echo 'All tests completed.'
+            junit '**/results_*.xml'
+        }
+        success {
+            echo 'All tests passed successfully.'
         }
         failure {
             echo 'Tests failed!'
