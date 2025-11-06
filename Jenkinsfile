@@ -37,6 +37,22 @@ pipeline {
                 '''
             }
         }
+
+        stage('Code Quality Scan (SonarQube)') {
+            environment {
+                SONAR_SCANNER_HOME = tool 'SonarScanner'
+            }
+            steps {
+                withSonarQubeEnv('SonarLocal') {
+                    sh '''
+                    $SONAR_SCANNER_HOME/bin/sonar-scanner \
+                      -Dsonar.projectKey=flask-ci-testing \
+                      -Dsonar.sources=. \
+                      -Dsonar.host.url=http://localhost:9000
+                    '''
+                }
+            }
+        }
     }
 
     post {
@@ -44,10 +60,10 @@ pipeline {
             junit '**/results_*.xml'
         }
         success {
-            echo 'All tests passed successfully.'
+            echo 'All tests and SonarQube scan completed successfully.'
         }
         failure {
-            echo 'Tests failed!'
+            echo 'Pipeline failed! Check logs for details.'
         }
     }
 }
