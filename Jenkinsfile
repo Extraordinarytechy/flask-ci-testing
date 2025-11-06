@@ -43,7 +43,7 @@ pipeline {
                 SONAR_SCANNER_HOME = tool 'SonarScanner'
             }
             steps {
-                withSonarQubeEnv('SonarLocal') {
+                withSonarQubeEnv('MySonar') {
                     sh '''
                     $SONAR_SCANNER_HOME/bin/sonar-scanner \
                       -Dsonar.projectKey=flask-ci-testing \
